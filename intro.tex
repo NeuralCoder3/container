@@ -1,7 +1,39 @@
 
 \section{Introduction}
 
-\lettrine[nindent=0em,lines=3]{L} orem ipsum dolor sit amet, consectetur adipiscing elit.
-\blindtext % Dummy text
+In type theory, types can have types as parametric arguments.
+Element of those parametric types are built using elements
+of the argument type. They encapsulate elements in them.
+A prominent example are products and lists.
+Products are constructed using an element of two 
+arbitrary types each.
+Lists on the other hand can contain arbitrary many
+elements of one given type.
 
-\blindtext % Dummy text
+One often needs to argue about the elements inside
+such a container type.
+For example for nested induction a statement is 
+needed that every element in the container fulfills
+the induction hypothesis.
+Another example are subterm relations of nested 
+inductive types where an element in the argument list
+of rose trees is a subterm of the whole rose tree.
+
+It was discovered that the parametricity translation
+provides the statement needed for nested induction.
+The unary parametricity translation of a type is a predicate
+on this type and all of its parametric type arguments
+stating that certain properties are satisfied.
+Therefore, the unary parametricity translation
+can be seen as a statement that for all type arguments
+and given predicates associated to this type
+all elements in the container satisfy the predicates.
+In short notation we will call this statement the
+forall predicate forall element statement of a container type.
+
+We will generalize statements over container types
+and show applications related to the subterm relations.
+
+
+
+
