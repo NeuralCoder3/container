@@ -1,0 +1,61 @@
+\section{Statements}
+The generalization of statements over container type uses different quantification
+of the predicates and elements in its meaning.
+
+Where unary parametricity is the forall predicate forall elements statement
+which states that every predicate of the type arguments is satisfied for 
+all elements in the container, other predicates using a notation
+of exists are imaginable.
+
+Especially the exists predicate exists element statement will be useful.
+This statement postulates that for one of the predicate there is 
+an element in the container satisfying the predicate.
+For example $\exists\exists_{\text{List}}~X~P_X~xs$ states for a list $xs:\text{List}~X$
+that there is an element $x\in xs$ with $P_X~x$.
+
+Additionally, other combinations such as a $\exists\forall$ or $\forall\exists$ statement
+are possible.
+
+\subsection{Example statements}
+
+\subsubsection{Product}
+% X*X
+% X*Y
+
+\subsubsection{List}
+
+\subsubsection{Complex typ}
+
+\subsubsection{Guarded}
+
+\subsubsection{Nested}
+
+
+\subsection{Comparison}
+
+\newcolumntype{m}{>{\hsize=.5\hsize}X}
+\begin{tabularx}{\textwidth}{ m|m }
+$\forall\forall_T$: for all predicates for all elements = unary parametricity &
+$\forall\exists_T$: for all predicates exists an element \\
+All predicates are satisfied for all elements in the container &
+All predicates are satisfied by at least one element in the container \\
+One constructor is translated to one constructor &
+\\
+A conjunction of $\exists\forall_T$ for each predicate with $\bot$ in place of the other predicates &
+A conjunction of $\exists\exists_T$ for each predicate with $\bot$ in place of the other predicates
+\end{tabularx}
+
+\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\begin{tabularx}{\textwidth}{ m|m }
+$\exists\forall_T$: exists predicates for all elements &
+$\exists\exists_T$: exists predicates exists an element \\
+At least one predicates is satisfied for all elements in the container &
+At least one predicates is satisfied by at least one element in the container \\
+&
+one argument is translated to one constructor\\
+A disjunction of $\forall\forall_T$ for each predicate with $\top$ in place of the other predicates &
+A disjunction of $\forall\exists_T$ for each predicate with $\top$ in place of the other predicates
+\end{tabularx}
+\ \\
+The conjunction can be represented by a single constructor with multiple arguments.
+Similarly the disjunction can be represented by multiple single argument constructors.

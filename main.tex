@@ -44,8 +44,8 @@
 \renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
 
 \usepackage{titlesec} % Allows customization of titles
-\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
-\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+\renewcommand\thesection{\arabic{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\arabic{section}.\arabic{subsection}} % roman numerals for subsections
 \titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
 \titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
 
@@ -59,6 +59,8 @@
 \usepackage{titling} % Customizing the title section
 
 \usepackage{hyperref} % For hyperlinks in the PDF
+\usepackage{amsmath}
+\usepackage{tabularx}
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
@@ -93,6 +95,9 @@
 \maketitle
 
 \input{intro.tex}
+\input{statements.tex}
+\input{subterm.tex}
+\input{nested.tex}
 \input{ref.tex}
 
 \end{document}
