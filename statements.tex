@@ -364,3 +364,42 @@ Similarly the disjunction can be represented by multiple single argument constru
 
 
 \subsection{Construction}
+The $\forall\forall$ and $\exists\exists$ have a common structure describing
+their generation.
+
+For $\forall\exists$ a generation procedure is possible but an inspection of 
+all constructor arguments against the type arguments is needed which leads
+to unintuitive results and complicated generation of the statements.
+
+The $\exists\forall$ statement is difficult to express due to the difficulty
+to choose one predicate and transport the choice through recursion.
+
+Therefore, $\forall\exists$ and $\exists\forall$ should be expressed in terms
+of $\forall\forall$ and $\exists\exists$ if needed.
+
+ %cleaned
+As $\forall\forall$ coincides with the trimmed unary parametricity translation 
+of inductive types, the generation procedure is well known.
+
+For $\exists\exists$ the general fulfillment criterion has to be considered:
+If one argument of an argument type satisfies a predicate, the $\exists\exists$ 
+statement is fulfilled. The other possibility to fulfill the $\exists\exists$ statement
+is by recursion following a recursive argument.
+
+From this intuition, the generation procedure for a container $T$ can be constructed:
+\begin{itemize}
+    \item for each constructor iterate over all arguments
+    \item if the argument $x$ has one of the parametric types $X$ as type,
+        add a constructor with an additional argument stating that
+            $x$ fulfills the predicate $P_X$
+    \item if the argument $t$ is recursive (of type $T$), add a constructor 
+        with an additional argument stating that $\exists\exists$ is fulfilled for $t$
+\end{itemize}
+
+In contrast to $\forall\forall$ where one constructor is translated to 
+one constructor with an additional argument for each suitable argument,
+the translation for $\exists\exists$ converts each suitable argument into a new constructor.
+
+
+
+%Todo: Describe Generation procedure
