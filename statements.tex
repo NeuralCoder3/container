@@ -27,14 +27,123 @@ their intuitive meaning.
 We first look at a simpler type of products with only one type
 argument.
 
+\[\text{Prod1}~X~::=~C~x_1~x_2\]
+
+As there is only one type argument $\forall Q_2$ and $\exists Q_2$ are the same statement.
+
+\begin{center}
 \begin{infrule}
+P_X~x_1
+P_X~x_2
 ===
-\forall\forall 
+Q\forall_{\text{Prod1}}~X~P_X~(C~x_1~x_2)
 \end{infrule}
+\end{center}
+
+\begin{infrule}
+P_X~x_1
+===
+Q\exists_{\text{Prod1}}~X~P_X~(C~x_1~x_2)
+\end{infrule}
+\begin{infrule}
+P_X~x_2
+===
+Q\exists_{\text{Prod1}}~X~P_X~(C~x_1~x_2)
+\end{infrule}
+
+A more interesting type is the well known product type:
+\[ \text{Prod}~X~Y~::=~\text{pair}~x~y \]
+We write $(x,y)$ as short notation for $\text{pair}~x~y$
+
+In $\forall\forall$ both arguments $x$ and $y$ has to satisfy 
+their corresponding predicates in all cases.
+Therefore, every instance $x$ of type $X$ is accompanied by a proof of $P_X~x$ in the 
+constructors of $\forall\forall$. The proof for $y:Y$ are added analogously.
+
+\begin{center}
+\begin{infrule}
+P_X~x
+P_Y~y
+===
+\forall\forall_{\text{Prod}}~X~P_X~Y~P_Y~(x,y)
+\end{infrule}
+\end{center}
+
+In contrast $\exists\exists$ only requires one of the predicates to be fulfilled by one element.
+Therefore, in one constructor the argument $x:X$ is augmented with a proof $P_X~x$.
+In another constructor a proof of $P_Y~y$ is required.
+
+\begin{infrule}
+P_X~x
+===
+\exists\exists_{\text{Prod}}~X~P_X~Y~P_Y~(x,y)
+\end{infrule}
+\begin{infrule}
+P_Y~y
+===
+\exists\exists_{\text{Prod}}~X~P_X~Y~P_Y~(x,y)
+\end{infrule}
+
+As there are only one instance of each type in the single constructor of Prod,
+the $\forall\exists$ statement is equivalent to $\forall\forall$.
+Similarly $\exists\forall$ is the same as $\exists\exists$.
 
 \subsubsection{List}
 
+\[xs: \text{List}~X~::=~[~]~|~x::xs\]
+
+The list container has one constructor with recursion under which 
+the statements need to propagate their meaning in order to reason over
+all elements in the lists.
+
+As there is only one type $\exists\forall$ coincides with $\forall\forall$ and 
+$\forall\exists$ coincides with $\exists\exists$.
+
+The $\forall\forall$ statements ensure that every instance of $x:X$ is accompanied by a proof $P_X~x$.
+The recursion in the statement follows the recursion of list to ensure that all elements are covered.
+
+\begin{infrule}
+====
+\forall\forall_{\text{List}}~X~P_X~[~]
+\end{infrule}
+\begin{infrule}
+P_X~x
+\forall\forall_{\text{List}}~X~P_X~xs
+====
+\forall\forall_{\text{List}}~X~P_X~(x::xs)
+\end{infrule}
+
+The $\exists\exists$ can not be fulfilled for the empty list as there is no
+instance $x$ to fulfill the only predicate $P_X$.
+For the cons constructor the duality of $\forall$ and $\exists$ or rather between
+$\land$ and $\lor$ can be observed.
+Whereas in $\forall\forall$ two arguments are added requiring that $x$ satisfies $P_X$
+and recursively all other elements in the list fulfill $P_X$,
+$\exists\exists$ has two constructor requiring only one of the two cases each.
+If the new element $x$ added by cons fulfills $P_X$, then there is an element 
+fulfilling $P_X$ in the list and the $\exists\exists$ statement holds.
+In the other case, we have the assumption that there is an element fulfilling $P_X$ 
+in the remaining list $xs$.
+
+\begin{infrule}
+P_X~x
+====
+\exists\exists_{\text{List}}~X~P_X~(x::xs)
+\end{infrule}
+\begin{infrule}
+\exists\exists_{\text{List}}~X~P_X~xs
+====
+\exists\exists_{\text{List}}~X~P_X~(x::xs)
+\end{infrule}
+
+
 \subsubsection{Complex typ}
+
+
+% Recursion
+% Two types
+% Mult constructors with arguments
+% multiple arguments of one type
 
 \subsubsection{Guarded}
 
