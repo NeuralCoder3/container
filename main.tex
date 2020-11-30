@@ -53,7 +53,7 @@
 \pagestyle{fancy} % All pages have headers and footers
 \fancyhead{} % Blank out the default header
 \fancyfoot{} % Blank out the default footer
-\fancyhead[C]{Running title $\bullet$ May 2016 $\bullet$ Vol. XXI, No. 1} % Custom header text
+\fancyhead[C]{Running title} % Custom header text
 \fancyfoot[RO,LE]{\thepage} % Custom footer text
 
 \usepackage{titling} % Customizing the title section
@@ -61,6 +61,36 @@
 \usepackage{hyperref} % For hyperlinks in the PDF
 \usepackage{amsmath}
 \usepackage{tabularx}
+
+\usepackage{bussproofs}
+\usepackage{fancyvrb}
+
+\newcounter{filenum}
+\makeatletter
+\newenvironment{pycode}[1]%
+{\xdef\d@tn@me{#1}\xdef\r@ncmd{python #1.py > #1.plog}%
+\typeout{Writing file #1}\VerbatimOut{#1.py}%
+}
+{\endVerbatimOut %
+\toks0{\immediate\write18}%
+\expandafter\toks\expandafter1\expandafter{\r@ncmd}%
+\edef\d@r@ncmd{\the\toks0{\the\toks1}}\d@r@ncmd %
+\input{\d@tn@me.plog}
+}
+
+\newenvironment{infrule}[0]%
+{\refstepcounter{filenum}\xdef\d@tn@me{f\thefilenum}\xdef\r@ncmd{python inf.py < tmp/f\thefilenum.in > tmp/f\thefilenum.plog}%
+\typeout{Writing file f\thefilenum}\VerbatimOut{tmp/f\thefilenum.in}%
+}
+{\endVerbatimOut %
+\toks0{\immediate\write18}%
+\expandafter\toks\expandafter1\expandafter{\r@ncmd}%
+\edef\d@r@ncmd{\the\toks0{\the\toks1}}\d@r@ncmd %
+\input{tmp/\d@tn@me.plog}
+}
+\makeatother
+
+
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
