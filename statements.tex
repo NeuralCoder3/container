@@ -139,19 +139,202 @@ P_X~x
 
 \subsubsection{Complex typ}
 
-
 % Recursion
 % Two types
 % Mult constructors with arguments
 % multiple arguments of one type
 
+A more complex type can be considered with multiple constructors and type parameters.
+The observed behaviour combines the simpler cases seen before.
+
+\[ c:\text{Complex}~X~Y~::=~A~x~|~B~x~y_1~y_2~|~C~y~c\]
+
+For the constructors $A$ and $B$ the $\forall\forall$ handles the arguments
+by requiring an proof of the corresponding predicates.
+The recursion is handled by recursion of the statement.
+
+\begin{infrule}
+P_X~x
+====
+\forall\forall_{\text{Complex}}~X~P_X~Y~P_Y~(A~x)
+\end{infrule}
+\begin{infrule}
+P_X~x
+P_Y~y_1
+P_Y~y_2
+====
+\forall\forall_{\text{Complex}}~X~P_X~Y~P_Y~(B~x~y_1~y_2)
+\end{infrule}
+\begin{center}
+\begin{infrule}
+P_Y~y
+\forall\forall_{\text{Complex}}~X~P_X~Y~P_Y~c
+====
+\forall\forall_{\text{Complex}}~X~P_X~Y~P_Y~(C~y~c)
+\end{infrule}
+\end{center}
+
+
+An instance constructed by $A$ can not satisfy the $\forall\exists$ statement
+as $P_Y$ is not satisfied by an element.
+For the $B$ constructor $x$ has to satisfy $P_X$ but for $P_Y$ one of the two 
+given elements of type $Y$ can be chosen.
+An object constructed using $C$ fulfills the $\forall\exists$ statement if 
+the recursive instance $c$ has elements fulfilling $P_X$ and $P_Y$ expressed by
+recursion. As there is no argument of type $X$, $P_X$ has to be satisfied by an element in $c$.
+Therefore, the second case for $C$ is superfluous.
+
+\begin{infrule}
+P_X~x
+P_Y~y_1
+====
+\forall\exists_{\text{Complex}}~X~P_X~Y~P_Y~(B~x~y_1~y_2)
+\end{infrule}
+\begin{infrule}
+P_X~x
+P_Y~y_2
+====
+\forall\exists_{\text{Complex}}~X~P_X~Y~P_Y~(B~x~y_1~y_2)
+\end{infrule}
+\begin{center}
+\begin{infrule}
+\forall\exists_{\text{Complex}}~X~P_X~Y~P_Y~c
+====
+\forall\exists_{\text{Complex}}~X~P_X~Y~P_Y~(C~y~c)
+\end{infrule}
+\end{center}
+
+
+$\exists\forall$ can not be expressed as a simple inductive type due to the 
+difficulty to transport the information which of the predicates $P_X$ or $P_Y$ 
+is the one satisfied by all elements through recursion.
+Therefore, $\exists\forall$ is expressed in terms of the other statements.
+One of the predicates has to be fulfilled by all elements and the other
+predicate can be ignore. Using this intuition, $\exists\forall$ is 
+a disjunction of two applications of $\forall\forall$ with true predicates 
+in place of the predicate not under observation.
+
+\begin{infrule}
+\forall\forall_{\text{Complex}}~X~P_X~Y~(\lambda \_.~\top)
+====
+\exists\forall_{\text{Complex}}~X~P_X~Y~P_Y~c
+\end{infrule}
+\begin{infrule}
+\forall\forall_{\text{Complex}}~X~(\lambda \_.~\top)~Y~P_Y
+====
+\exists\forall_{\text{Complex}}~X~P_X~Y~P_Y~c
+\end{infrule}
+
+For each argument of one of the argument types as well as for
+each a recursive instance a constructor is added with one proof
+as argument.
+
+\begin{infrule}
+P_X~x
+===
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~(A~x)
+\end{infrule}
+\begin{infrule}
+P_X~x
+===
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~(B~x~y_1~y_2)
+\end{infrule}
+
+\begin{infrule}
+P_Y~y_1
+===
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~(B~x~y_1~y_2)
+\end{infrule}
+\begin{infrule}
+P_Y~y_2
+===
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~(B~x~y_1~y_2)
+\end{infrule}
+
+\begin{infrule}
+P_Y~y
+===
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~(C~y~c)
+\end{infrule}
+\begin{infrule}
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~c
+===
+\exists\exists_{\text{Complex}}~X~P_X~Y~P_Y~(C~y~c)
+\end{infrule}
+
+
 \subsubsection{Guarded}
 
+Guarded recursion is handled in the usual fashion.
+But for the statements guarded instances of type arguments have to be considered.
+\[ G~X~::=~C~(f:\mathbb{N}\to X)\]
+
+\begin{center}
+\begin{infrule}
+\forall n.~P_X~(f~n)
+====
+\forall\forall_G~X~P_X~(C~f)
+\end{infrule}
+\end{center}
+
+% TODO: 
+\begin{center}
+\begin{infrule}
+\exists n.~P_X~(f~n)
+===
+\exists\exists_G~X~P_X~(C~f)
+\end{infrule}
+\end{center}
+
+
 \subsubsection{Nested}
+
+Nested in this context does not mean nested induction but rather nested container
+occurrences in a container.
+
+\[ R~X~::=~T~(xs:\text{List}~X) \]
+
+In order to require all instances of type $X$ in an element of type $R$ to fulfill $P_X$,
+all elements in the list $xs$ need to fulfill $P_X$.
+The requirement that all elements in a list fulfill a predicate is expressed using $\forall\forall$.
+
+\begin{center}
+\begin{infrule}
+\forall\forall_{\text{List}}~X~P_X~xs
+====
+\forall\forall_R~X~P_X~(T~xs)
+\end{infrule}
+\end{center}
+
+In order to have at least one element in the instance of $R$ constructed by $T$ fulfilling 
+$P_X$, an element in the list has to fulfill $P_X$.
+
+\begin{center}
+\begin{infrule}
+\exists\exists_{\text{List}}~X~P_X~xs
+====
+\exists\exists_R~X~P_X~(T~xs)
+\end{infrule}
+\end{center}
 
 
 \subsection{Comparison}
 
+In the following table the structure is as follows:
+
+\begin{center}
+\fbox{\begin{minipage}{.5\textwidth}
+\setlist[itemize]{wide=0pt, label=\textbullet, noitemsep, topsep=2pt, leftmargin=*}
+    \begin{itemize}
+\item statement: name in words
+\item explanation of the meaning
+\item translation structure
+\item representation with other statements
+    \end{itemize}
+\end{minipage}}
+\end{center}
+
+\noindent
 \newcolumntype{m}{>{\hsize=.5\hsize}X}
 \begin{tabularx}{\textwidth}{ m|m }
 $\forall\forall_T$: for all predicates for all elements = unary parametricity &
@@ -178,3 +361,6 @@ A disjunction of $\forall\exists_T$ for each predicate with $\top$ in place of t
 \ \\
 The conjunction can be represented by a single constructor with multiple arguments.
 Similarly the disjunction can be represented by multiple single argument constructors.
+
+
+\subsection{Construction}
