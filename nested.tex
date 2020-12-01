@@ -1,4 +1,111 @@
 \section{Nested subterm}
 
-To generate the nested subterm relation the $\exists\exists_T$ translation of the container
-type $T$ is used.
+The subterm is generates as described in section~\ref{sec:subterm}.
+The generation is extended to handle nested recursion.
+Therefore, arguments of container types containing recursive instances
+are captured by the nested subterm relation.
+
+For arguments of container type $C$ the $\exists\exists_C$ statement is used 
+to express the subterm relation.
+
+\[\Rose~::=~\tree~(xs:\List~\Rose)\]
+
+For rose trees each element in the argument list $xs$ is a subtree of the 
+constructed tree $\tree xs$. To express the element that is considered to 
+be a subterm, a new argument $r$ is introduced.
+For the direct subterm relation, the subtree $x$ has to be one of the elements
+in the list. This relation is expressed using equality.
+
+\begin{einfrule}[c]
+\exists\exists_{\List}~\Rose~(\lambda y.~x=y)~xs
+=====
+\Sub_{\Rose}~r~(\tree~xs)
+\end{einfrule}
+
+Alternatively, a transitive approach to nested subtrees is also
+possible. To express transitive nested subterms, the subterm relation
+is used as predicate which one element in the container has to satisfy.
+
+\begin{einfrule}[c]
+\exists\exists_{\List}~\Rose~(\Sub_{\Rose}~x)~xs
+=====
+\Sub_{\Rose}~r~(\tree~xs)
+\end{einfrule}
+
+\subsection{Examples}
+
+The following examples highlight different possibilities how container 
+could be instantiated and composed inside nested inductive types.
+
+\subsubsection{Multiple recursive arguments}
+
+\[T~::=~C~(p:\Prod~T~T)\]
+
+An instance $t$ is a subterm of $C~p$ if it is one of the two elements
+out of which the pair $p=(t_1,t_2)$ is composed.
+
+\begin{infrule}
+===
+\Sub_T~t_1~(C~(t_1,t_2))
+\end{infrule}
+\begin{infrule}
+===
+\Sub_T~t_2~(C~(t_1,t_2))
+\end{infrule}
+
+But this approach only works for non-recursive container and need an
+enumeration of all constructors. Therefore, the $\exists\exists$ 
+statement is used to generalize the subterm generation.
+An instance $t$ is a subterm of $C~p$ if one of the two types
+have an element in the container which is equal to $t$, or simpler
+$t$ is contained in $p$.
+
+\begin{einfrule}[c]
+\exists\exists_{\Prod}~T~(\lambda y.~t=y)~T~(\lambda y.~t=y)
+===
+\Sub_T~t~(C~p)
+\end{einfrule}
+
+\subsubsection{Non recursive arguments}
+
+\[T~::=~C~(p:\Prod~\Nat~T)~|~D~(q:\Prod~\Nat~\Nat)\]
+
+For the $D$ constructor, no subterm constructor is generated as 
+$D$ has no recursive arguments.
+The $C$ constructor has a pair with a subterm inside it.
+To guarantee that $t$ is in the pair and therefore a subterm of $C~p$,
+the other predicate, for the non recursive type $\Nat$, must not be satisfiable.
+Therefore, the trivial false predicate $\lambda \_.~\bot$ is used.
+
+\begin{center}
+\begin{infrule}
+\exists\exists_{\Prod}~\Nat~(\lambda \_.~\bot)~T~(\lambda y.~t=y)
+===
+\Sub_T~t~(C~p)
+\end{infrule}
+\end{center}
+
+\subsubsection{Deep nesting}
+
+\[T~::=~C~(p:\Prod~(\List~T)~T)\]
+
+For deep nested container like the list of elements $t:T$ inside the pair $p$,
+the $\exists\exists$ statements need to be nested.
+A term $t$ is a subterm of $C~p$ is it is in the second component or an element
+in the list which is the first component.
+The element-of-list relation is expressed using $\exists\exists_{\List}$.
+
+% eta conversion for inner \lambda xs. .... xs
+\begin{center}
+\begin{infrule}
+\exists\exists_{\Prod}~(\List~T)~(\exists\exists_{\List}~T~(\lambda y.~t=y))~T~(\lambda y.~t=y)
+===
+\Sub_T~t~(C~p)
+\end{infrule}
+\end{center}
+
+
+\subsection{Generation}
+
+% recursive calls
+In general 
